@@ -1,0 +1,65 @@
+package com.example.admin.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.example.admin.auth.config.JwtService;
+import com.example.admin.domain.AdminEntity;
+import com.example.admin.domain.LoginRequest;
+import com.example.admin.domain.LoginResponse;
+import com.example.admin.proxy.AdminProxy;
+import com.example.admin.repository.AdminRepo;
+import com.example.admin.service.AdminService;
+
+public class AdminServiceImpl implements AdminService
+{
+	
+	@Autowired
+	private AdminRepo adminRepo;
+	
+	@Autowired
+	private JwtService jwtService;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
+	
+	@Autowired
+	private AuthenticationManager authmanager;
+	
+	@Override
+	public LoginResponse login(LoginRequest loginRequest)
+	{
+		//System.out.println("login response from emp service called..");
+		Authentication authentication=new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
+		
+		Authentication verified = authmanager.authenticate(authentication);
+		
+		//verified.getAuthorities().stream().forEach(a->System.out.println("Authorities:"+a));
+		if(!verified.isAuthenticated())
+		{
+			System.out.println("bad credials..");
+			//throw new ErrorResponse("bad credentials",404);
+		}
+		System.err.println("authenticated....."+loginRequest.getEmail()+"\n"+loginRequest.getPassword());
+		 return new LoginResponse(loginRequest.getEmail(),jwtService.genearteTocken(loginRequest.getEmail()),(List<SimpleGrantedAuthority>) verified.getAuthorities());
+	}
+
+	@Override
+	public String RegisterAdmin(AdminProxy admin) {
+		
+		return null;
+	}
+
+	@Override
+	public AdminEntity getAdminById(Integer id) {
+		
+		return null;
+	}
+}

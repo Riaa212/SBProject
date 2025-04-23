@@ -1,0 +1,56 @@
+package com.example.admin.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.admin.domain.UserEntity;
+import com.example.admin.proxy.UserProxy;
+import com.example.admin.repository.UserRepo;
+import com.example.admin.service.UserService;
+import com.example.admin.utils.Helper;
+
+@Service
+public class UserServiceImpl implements UserService
+{
+	
+	@Autowired	
+	private Helper helper;
+
+	@Autowired
+	private UserRepo userRepo;
+	
+	@Override
+	public String registerUser( UserProxy user) {
+//		user, UserEntity.class)
+		UserEntity userObj = helper.convert(user, UserEntity.class);
+		userRepo.save(helper.convert(user, UserEntity.class));
+		return "user Register successfully..";
+	}
+
+	@Override
+	public List<UserProxy> getAllusers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserProxy getUserById() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserProxy updateUserById(UserProxy user, Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String deleteUserById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

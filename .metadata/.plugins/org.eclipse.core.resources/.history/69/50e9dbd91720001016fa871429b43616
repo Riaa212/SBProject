@@ -1,0 +1,21 @@
+package com.example.admin.service;
+
+import java.util.List;
+
+import com.example.admin.proxy.UserProxy;
+
+public interface UserService {
+
+	
+	public String registerUser(UserProxy user);
+	
+	public List<UserProxy> getAllusers();
+	
+	
+	public UserProxy getUserById();
+	
+	
+	public UserProxy updateUserById(UserProxy user,Integer id);
+	
+	public String deleteUserById(Integer id);
+}

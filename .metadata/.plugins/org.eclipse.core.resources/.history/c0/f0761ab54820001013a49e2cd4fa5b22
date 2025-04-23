@@ -1,0 +1,27 @@
+package com.example.admin.proxy;
+
+import java.util.Date;
+
+import com.example.admin.enums.GenderEnum;
+import com.github.javafaker.PhoneNumber;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserProxy {
+
+	private Integer id;
+	private String userName;
+	private Date dob;
+	private String password;
+	private String email;
+	private GenderEnum gender;
+	private String address;
+	private PhoneNumber mobileNumber;
+	private String pinCode;
+	private String Role;
+}

@@ -1,0 +1,5 @@
+package com.example.admin.auth.config;
+
+public class JwtService {
+
+}

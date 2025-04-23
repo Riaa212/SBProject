@@ -1,0 +1,8 @@
+package com.example.admin.domain;
+
+public class AdminEntity {
+
+	private Integer id;
+	private String userName;
+	private String role;
+}

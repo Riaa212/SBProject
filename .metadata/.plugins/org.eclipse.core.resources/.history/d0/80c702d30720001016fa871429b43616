@@ -1,0 +1,10 @@
+package com.example.admin.service;
+
+public interface AdminService {
+
+	
+	public String RegisterAdmin();
+	
+	
+	
+}
