@@ -1,0 +1,61 @@
+// Configuration class
+@Configuration
+public class ReCaptchaConfig {
+
+    @Value("${recaptcha.secret-key}")
+    private String secretKey;
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+}
+
+// Verification Service
+@Service
+public class ReCaptchaService {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private ReCaptchaConfig reCaptchaConfig;
+
+
+    public boolean verify(String response) {
+        String url = "https://www.google.com/recaptcha/api/siteverify";
+        String params = "?secret=" + reCaptchaConfig.getSecretKey() + "&response=" + response;
+        ReCaptchaResponse reCaptchaResponse = restTemplate.getForObject(url + params, ReCaptchaResponse.class);
+        return reCaptchaResponse != null && reCaptchaResponse.isSuccess();
+    }
+
+    static class ReCaptchaResponse {
+      private boolean success;
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public void setSuccess(boolean success) {
+            this.success = success;
+        }
+    }
+}
+
+//Controller
+@RestController
+public class MyController {
+
+    @Autowired
+    private ReCaptchaService reCaptchaService;
+
+    @PostMapping("/submitForm")
+    public ResponseEntity<String> submitForm(@RequestParam String name, @RequestParam String email, @RequestParam String recaptchaResponse) {
+        if (reCaptchaService.verify(recaptchaResponse)) {
+            // Process form data if reCAPTCHA is valid
+            return ResponseEntity.ok("Form submitted successfully!");
+        } else {
+            // Handle invalid reCAPTCHA
+            return ResponseEntity.badRequest().body("Invalid reCAPTCHA. Please try again.");
+        }
+    }
+}

@@ -1,0 +1,7 @@
+spring.application.name=serviceadmin
+spring.datasource.url=jdbc:mysql://localhost:3306/admindb
+spring.datasource.username=root
+spring.datasource.password=1234
+spring.jpa.hibernate.ddl-auto=update
+server.port=2424
+

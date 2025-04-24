@@ -1,9 +1,14 @@
 package com.example.admin.service.impl;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,17 +17,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.admin.auth.config.JwtService;
 import com.example.admin.domain.AdminEntity;
 import com.example.admin.domain.LoginRequest;
 import com.example.admin.domain.LoginResponse;
-import com.example.admin.domain.UserEntity;
 import com.example.admin.enums.RoleEnum;
 import com.example.admin.proxy.AdminProxy;
 import com.example.admin.repository.AdminRepo;
 import com.example.admin.service.AdminService;
 import com.example.admin.utils.Helper;
+
+import io.jsonwebtoken.io.IOException;
 
 @Service
 public class AdminServiceImpl implements AdminService
@@ -145,4 +152,61 @@ public class AdminServiceImpl implements AdminService
 		}
 		return "Something went wrong!!!!";
 	}
+	
+
+	public AdminEntity createadmin(List<MultipartFile> images,AdminEntity adminEntity)
+	{
+		
+	    List<String> imageUrls = new ArrayList<>();
+	    
+	    for (MultipartFile image : images) {
+	        try {
+	        	//for unique file name
+	        	UUID uuid=UUID.randomUUID();
+	            String fileName =  uuid+ "_" + image.getOriginalFilename();
+	            
+	            //upload in folder
+	            Path path = Paths.get("uploads/" + fileName);
+	            
+	            Files.write(path, image.getBytes());
+
+	            	
+	            String imageUrl= "http://localhost:2424/uploads/" + fileName;
+	      
+	            imageUrls.add(imageUrl);
+	            
+//	            System.err.println("inside==="+imageUrl);
+//	            
+//	            System.err.println("Image saved to: " + path.toAbsolutePath());
+//	            
+	            // Get just the file part from the URL
+//	            String filePart = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
+
+	            // Now get the part after the last underscore
+//	            String finalFileName = filePart.substring(filePart.lastIndexOf('_') + 1);
+//
+//	            System.err.println("image url===>"+finalFileName);  // Output: place.jpg
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        } catch (java.io.IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
+	    
+	    AdminEntity admin = new AdminEntity();
+	    admin.setEmail(adminEntity.getEmail());
+	    admin.setUserName(adminEntity.getUserName());
+	    admin.setPassword(passwordEncoder.encode(adminEntity.getPassword()));
+	    admin.setRole(RoleEnum.Admin.toString());
+	    System.err.println(imageUrls);
+	    admin.setImageUrl(imageUrls);
+//	    adminEntity.setImageUrl(imageUrls);
+	    
+	    AdminEntity saved = adminRepo.save(admin);
+	    
+	    
+	    return saved;
+	}
+	
 }

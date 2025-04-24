@@ -45,6 +45,12 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.getAllusers(pageNumber,pageSize));
 	}
 	
+	@GetMapping("/getUsername/{name}")
+	public ResponseEntity<?> searchUser(@PathVariable("name") String name,@RequestParam(value="page",defaultValue = "0") Integer pageNumber,@RequestParam(value = "size",defaultValue = "10") Integer pageSize)
+	{
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.getAllusers(pageNumber,pageSize));
+	}
+	
 	@DeleteMapping("/delete")
 	public ResponseEntity<?> deleteAllUsers()
 	{
@@ -69,5 +75,10 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.getUserById(id));
 	}
 	
-	
+	@GetMapping("/getUserByName/{name}")
+	public ResponseEntity<?> getUserByName(@PathVariable("name") String username,@RequestParam(value="page",defaultValue = "0") Integer pageNumber,@RequestParam(value = "size",defaultValue = "10") Integer pageSize)
+	{
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.searchByName(username, pageNumber,pageSize));
+	}
+
 }

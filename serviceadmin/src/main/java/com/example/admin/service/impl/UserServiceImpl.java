@@ -1,6 +1,7 @@
 package com.example.admin.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class UserServiceImpl implements UserService
 	private UserRepo userRepo;
 	
 	@Override
-	public String registerUser( UserProxy user) {
-		user.setRole(RoleEnum.User.toString());
+	public String registerUser(UserProxy user) {
+		user.setRole(RoleEnum.User);
 		UserEntity userObj = helper.convert(user, UserEntity.class);
 		userRepo.save(helper.convert(user, UserEntity.class));
 		return "user Register successfully..";
@@ -50,6 +51,8 @@ public class UserServiceImpl implements UserService
 	//generate users
 	private UserEntity generateUsers()
 	{
+		
+	String profileImageUrl = "https://picsum.photos/200/300?random=" ;
 	LocalDateTime curreDateTime=LocalDateTime.now();
 	Faker f=new Faker();
 	UserEntity user=new UserEntity();
@@ -60,6 +63,8 @@ public class UserServiceImpl implements UserService
 	user.setAddress(f.address().fullAddress());
 	user.setPinCode(f.country().countryCode2());
 	user.setMobileNumber(f.phoneNumber().phoneNumber());
+//	f.avatar().image().to
+	user.setUserImg(profileImageUrl+f.number().randomNumber());
 	return user;
 	}
 	
@@ -75,10 +80,22 @@ public class UserServiceImpl implements UserService
 //		List<UserEntity> userEntity = userRepo.findAll();
 //		return helper.convertList(userEntity, UserProxy.class);
 		Page<UserEntity> page = userRepo.findAll(PageRequest.of(pageNumber, pageSize));
+//		System.err.println(page.stream().for);
+//		List<UserEntity> byUserName = userRepo.findByUserName(userName);
 		System.err.println("page===>"+page+"\nPage Number==>"+pageNumber+"\nPage Size==>"+pageSize);
 		return page;
 	}
 
+
+	public Page<UserEntity> searchByName(String userName,Integer pageNumber, Integer pageSize) {
+		
+		Page<UserEntity> all = userRepo.findAll(PageRequest.of(pageNumber, pageSize));
+		
+	   Page<UserEntity> byUserName = userRepo.findByUserNameContainingIgnoreCase(userName,PageRequest.of(pageNumber, pageSize));
+		
+		return byUserName;
+	}
+	
 	
 	@Override
 	public UserProxy getUserById(Integer userId) {

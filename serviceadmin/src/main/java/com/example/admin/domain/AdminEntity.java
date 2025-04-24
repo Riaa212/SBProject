@@ -2,8 +2,7 @@ package com.example.admin.domain;
 
 import java.util.List;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,4 +25,8 @@ public class AdminEntity {
 	private String email;
 	private String role;
 	private String otp;
+	
+	@ElementCollection
+    private List<String> imageUrl;
+	
 }

@@ -3,8 +3,10 @@ package com.example.admin.proxy;
 import java.util.Date;
 
 import com.example.admin.enums.GenderEnum;
-import com.github.javafaker.PhoneNumber;
+import com.example.admin.enums.RoleEnum;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,5 +25,7 @@ public class UserProxy {
 	private String address;
 	private String mobileNumber;
 	private String pinCode;
-	private String Role;
+//	 @Enumerated(EnumType.STRING)
+	private RoleEnum Role;
+	private String userImg;
 }

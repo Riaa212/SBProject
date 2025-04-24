@@ -1,0 +1,15 @@
+package com.example.admin.utils;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class RecaptchaConfig {
+
+	 @Value("${recaptcha.secret-key}")
+	    private String secretKey;
+
+	    public String getSecretKey() {
+	        return secretKey;
+	    }
+}

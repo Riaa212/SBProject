@@ -1,5 +1,7 @@
 package com.example.admin.proxy;
 
+import java.util.List;
+
 import com.example.admin.enums.RoleEnum;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +17,8 @@ public class AdminProxy {
 	private String userName;
 	private String password;
 	private String email;
+	
 	private RoleEnum role;
 	
+    private List<String> imageUrl;
 }

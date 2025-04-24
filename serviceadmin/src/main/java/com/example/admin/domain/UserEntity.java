@@ -4,12 +4,12 @@ import java.util.Date;
 
 import com.example.admin.enums.GenderEnum;
 import com.example.admin.enums.RoleEnum;
-import com.github.javafaker.PhoneNumber;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+//@Table(name="user")
 public class UserEntity {
 	
 	@Id
@@ -30,6 +31,8 @@ public class UserEntity {
 	private String email;
 	private String mobileNumber;
 	private String pinCode;
+	private String userImg;
+//	  @Enumerated(EnumType.STRING)
 	private RoleEnum Role;
 //	public void setMobileNumber(PhoneNumber phoneNumber) {
 //		// TODO Auto-generated method stub
