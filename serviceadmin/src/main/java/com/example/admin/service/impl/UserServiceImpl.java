@@ -98,6 +98,7 @@ public class UserServiceImpl implements UserService
 		if(byId.isPresent())
 		{
 			UserEntity userEntity = byId.get();
+			userEntity.setUserName(user.getUserName());
 			userEntity.setEmail(user.getEmail());
 			userEntity.setDob(user.getDob());
 			userEntity.setGender(user.getGender());
