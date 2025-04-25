@@ -11,6 +11,9 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.admin.auth.config.JwtService;
 import com.example.admin.domain.AdminEntity;
+import com.example.admin.domain.EmailDetails;
 import com.example.admin.domain.LoginRequest;
 import com.example.admin.domain.LoginResponse;
 import com.example.admin.enums.RoleEnum;
@@ -47,6 +51,12 @@ public class AdminServiceImpl implements AdminService
 	
 	@Autowired
 	private AuthenticationManager authmanager;
+	
+	@Autowired 
+	private JavaMailSender javaMailSender;
+
+    @Value("${spring.mail.username}") 
+    private String sender;
 	
 	@Autowired
 	private Helper helper;
@@ -113,15 +123,22 @@ public class AdminServiceImpl implements AdminService
 		return null;
 	}
 	
-	public String testOtp(String email)
+	public String testOtp(EmailDetails details)
 	{
 		System.err.println("generate otp method............");
 		String otp=null;
-		Optional<AdminEntity> byEmail = adminRepo.findByEmail(email);
+		Optional<AdminEntity> byEmail = adminRepo.findByEmail(details.getRecipient());
 		if(byEmail.isPresent())
 		{
 			AdminEntity adminobj=byEmail.get();
+			SimpleMailMessage mailMessage= new SimpleMailMessage();
 			otp= new DecimalFormat("000000").format(new Random().nextInt(999999));
+			   mailMessage.setFrom(sender);
+	           mailMessage.setTo(details.getRecipient());
+	           mailMessage.setText(details.getMsgBody()+otp);
+	           mailMessage.setSubject(details.getSubject());
+	           javaMailSender.send(mailMessage);
+			
 			System.out.println("OTP===>"+otp);	
 			adminobj.setOtp(otp);
 			adminRepo.save(adminobj);
@@ -129,11 +146,40 @@ public class AdminServiceImpl implements AdminService
 		return otp;
 	}
 	
+	
+	public String sendSimpleMail(EmailDetails details) {
+		
+		
+		 // Try block to check for exceptions
+       try {
+
+           // Creating a simple mail message
+           SimpleMailMessage mailMessage
+               = new SimpleMailMessage();
+
+           // Setting up necessary details
+           mailMessage.setFrom(sender);
+           mailMessage.setTo(details.getRecipient());
+           mailMessage.setText(details.getMsgBody());
+           mailMessage.setSubject(details.getSubject());
+           // Sending the mail
+           javaMailSender.send(mailMessage);
+           return "Mail Sent Successfully...";
+       }
+
+       // Catch block to handle the exceptions
+       catch (Exception e) {
+       	System.err.println(e);
+           return "Error while Sending Mail";
+       }
+	}
+	
 	public String forgetPwd(AdminEntity admin)
 	{
 		System.err.println("forget password calledd........");
 		Optional<AdminEntity> byEmail = adminRepo.findByEmail(admin.getEmail());
 	
+//		EmailDetails details=new EmailDetails();
 		
 		if(byEmail.isPresent())
 		{
@@ -141,17 +187,32 @@ public class AdminServiceImpl implements AdminService
 			
 			if(byOtp.isPresent())
 			{				
+//				System.err.println("in otp");
+//				 SimpleMailMessage mailMessage= new SimpleMailMessage();
+//				 mailMessage.setFrom(sender);
+//		         mailMessage.setTo(recipient);
+//		         mailMessage.setText(msg);
+//		         mailMessage.setSubject(subject);
+				 
+//		         javaMailSender.send(mailMessage);
+		         
 				//update password
 				System.err.println("update....................."+byOtp.get().getEmail());
+				
 				byOtp.get().setPassword(passwordEncoder.encode(admin.getPassword()));
+				
 				System.err.println("by otp===>"+byOtp);
+				
 				adminRepo.save(byOtp.get());
+				
 				System.err.println("after saved successfully.....");
+				
 				return "password updated successfully";
 			}
 		}
 		return "Something went wrong!!!!";
 	}
+	
 	
 
 	public AdminEntity createadmin(List<MultipartFile> images,AdminEntity adminEntity)

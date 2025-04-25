@@ -52,7 +52,9 @@ public class SecurityConfig {
 				"/user/saveBluckstd/**",
 				"/admin/resetpassword",
 				"/admin/testOtp/**",
-				"/admin/registerAdminwithImg"
+				"/admin/registerAdminwithImg",
+				"/admin/login",
+				"/admin/getCaptcha"
 //				"/user/loginReq",
 //				"/user/testOtp/**",
 //				"/user/resetpassword",

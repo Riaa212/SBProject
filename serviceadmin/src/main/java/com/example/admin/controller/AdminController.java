@@ -1,6 +1,8 @@
 package com.example.admin.controller;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.admin.domain.AdminEntity;
+import com.example.admin.domain.EmailDetails;
 import com.example.admin.domain.LoginRequest;
 import com.example.admin.domain.LoginResponse;
 import com.example.admin.proxy.AdminProxy;
 import com.example.admin.service.impl.AdminServiceImpl;
 import com.example.admin.service.impl.RecaptchaService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/admin")
@@ -70,17 +75,33 @@ public class AdminController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.updateAdminById(id,admin));
 	}
 	
-	@PostMapping("/resetpassword")
+	@PostMapping("/resetpassword") //working for reset password -forget password
 	public ResponseEntity<?> generateOtp(@RequestBody AdminEntity user)
 	{
 		return ResponseEntity.status(HttpStatus.OK).body(service.forgetPwd(user));
 	}
 
-	@GetMapping("/testOtp/{email}")
-	public String testOtp(@PathVariable String email)
+	@GetMapping("/testOtp") //working for sent otp
+	public String testOtp(@RequestBody EmailDetails emailDetails)
 	{
 		
-		return service.testOtp(email);
+		return service.testOtp(emailDetails);
+	}
+	
+	 @GetMapping("/getCaptcha")
+	    public ResponseEntity<Map<String, String>> getCaptcha(HttpSession session) throws IOException {
+	        return ResponseEntity.ok(reCaptchaService.createCaptcha(session));
+	    }
+	
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
+	    String expectedCaptcha = (String) session.getAttribute("captcha");
+
+	    if (expectedCaptcha == null || !expectedCaptcha.equalsIgnoreCase(loginRequest.getCaptcha())) {
+	        return ResponseEntity.badRequest().body("Invalid CAPTCHA");
+	    }
+	    // Proceed with login logic...
+	    return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.login(loginRequest));
 	}
 	
 	 @PostMapping("/registerAdminwithImg")
