@@ -54,7 +54,8 @@ public class SecurityConfig {
 				"/admin/testOtp/**",
 				"/admin/registerAdminwithImg",
 				"/admin/login",
-				"/admin/getCaptcha"
+				"/admin/getCaptcha",
+				"/user/downloadExcelFile"
 //				"/user/loginReq",
 //				"/user/testOtp/**",
 //				"/user/resetpassword",

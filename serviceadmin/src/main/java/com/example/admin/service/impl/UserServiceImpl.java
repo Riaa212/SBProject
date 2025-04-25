@@ -1,5 +1,7 @@
 package com.example.admin.service.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,7 @@ import com.example.admin.enums.RoleEnum;
 import com.example.admin.proxy.UserProxy;
 import com.example.admin.repository.UserRepo;
 import com.example.admin.service.UserService;
+import com.example.admin.utils.ExcelHelper;
 import com.example.admin.utils.Helper;
 import com.github.javafaker.Faker;
 
@@ -134,4 +137,14 @@ public class UserServiceImpl implements UserService
 		return "user deleted successfully";
 	}
 
+	
+	//download excel file
+	public ByteArrayOutputStream downloadExcelFile() throws IOException //working
+	{
+		List<UserEntity> emps=userRepo.findAll();
+		
+		ByteArrayOutputStream empToExcel = ExcelHelper.empToExcel(emps);
+		
+		return empToExcel;
+	}
 }

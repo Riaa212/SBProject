@@ -1,5 +1,7 @@
 package com.example.admin.controller;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.admin.domain.UserEntity;
 import com.example.admin.proxy.UserProxy;
 import com.example.admin.service.impl.UserServiceImpl;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping("/user")
@@ -81,4 +87,14 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.searchByName(username, pageNumber,pageSize));
 	}
 
+	@GetMapping("/downloadExcelFile") //working
+	  public ResponseEntity<byte[]> getFile() throws IOException {
+		 
+		  String fileName="userdata.xlsx";
+	     return ResponseEntity.ok()
+	        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+fileName)
+	        .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+//	        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+	        .body(service.downloadExcelFile().toByteArray());
+	  }
 }

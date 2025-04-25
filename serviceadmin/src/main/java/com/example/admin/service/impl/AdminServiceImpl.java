@@ -135,7 +135,7 @@ public class AdminServiceImpl implements AdminService
 			otp= new DecimalFormat("000000").format(new Random().nextInt(999999));
 			   mailMessage.setFrom(sender);
 	           mailMessage.setTo(details.getRecipient());
-	           mailMessage.setText(details.getMsgBody()+otp);
+	           mailMessage.setText("Your otp is.."+otp);
 	           mailMessage.setSubject(details.getSubject());
 	           javaMailSender.send(mailMessage);
 			
