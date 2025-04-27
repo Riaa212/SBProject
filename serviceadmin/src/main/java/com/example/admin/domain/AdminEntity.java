@@ -26,7 +26,9 @@ public class AdminEntity {
 	private String role;
 	private String otp;
 	
-	@ElementCollection
-    private List<String> imageUrl;
+//	@ElementCollection
+//    private List<String> imageUrl;
+	
+	private String profilePic;
 	
 }

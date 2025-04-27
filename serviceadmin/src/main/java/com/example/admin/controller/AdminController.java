@@ -1,12 +1,15 @@
 package com.example.admin.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +28,7 @@ import com.example.admin.domain.EmailDetails;
 import com.example.admin.domain.LoginRequest;
 import com.example.admin.domain.LoginResponse;
 import com.example.admin.proxy.AdminProxy;
+import com.example.admin.repository.AdminRepo;
 import com.example.admin.service.impl.AdminServiceImpl;
 import com.example.admin.service.impl.RecaptchaService;
 
@@ -38,8 +43,14 @@ public class AdminController {
 	private AdminServiceImpl service;
 	
 	 @Autowired
-	    private RecaptchaService reCaptchaService;
+	 private RecaptchaService reCaptchaService;
 	
+	 @Autowired
+	 private AdminRepo repo;
+	 
+	 @Autowired
+	 private BCryptPasswordEncoder passwordEncoder;
+	 
 	@PostMapping("/register")
 	public ResponseEntity<?> registerAdmin(@RequestBody AdminProxy admin)
 	{
@@ -81,7 +92,7 @@ public class AdminController {
 		return ResponseEntity.status(HttpStatus.OK).body(service.forgetPwd(user));
 	}
 
-	@GetMapping("/testOtp") //working for sent otp
+	@PostMapping("/testOtp") //working for sent otp
 	public String testOtp(@RequestBody EmailDetails emailDetails)
 	{
 		
@@ -100,6 +111,7 @@ public class AdminController {
 	    if (expectedCaptcha == null || !expectedCaptcha.equalsIgnoreCase(loginRequest.getCaptcha())) {
 	        return ResponseEntity.badRequest().body("Invalid CAPTCHA");
 	    }
+	    
 	    // Proceed with login logic...
 	    return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.login(loginRequest));
 	}
@@ -116,7 +128,69 @@ public class AdminController {
 	     return ResponseEntity.status(HttpStatus.OK).body(service.createadmin(images, adminEntity));
 	 }
 	 
+//	 private static final String UPLOAD_DIR = "adminProfile/";
 
+	    @PostMapping("/upload")
+	    public String uploadImage(
+	    		@RequestParam("username") String username,
+	    		@RequestParam("email") String email,
+	    		@RequestParam("password")String password, 
+	    		@RequestParam("image") MultipartFile file) throws IOException {
+
+	    	
+	    	  try {
+	              // Folder: uploads/adminProfile
+//	              String folderPath = "upload/adminProfile";
+//	              File dir = new File(folderPath);
+//	              if (!dir.exists()) {
+//	                  boolean created = dir.mkdirs();
+//	                  System.out.println("Directory created: " + created);
+//	              }
+	    		  
+	    		// Get absolute path to the project root
+	    		  String projectRoot = new File(".").getCanonicalPath();
+	    		  String folderPath = projectRoot + File.separator + "uploads" + File.separator + "adminProfile";
+	    		  File uploadDir = new File(folderPath);
+
+	    		  // Create folder if it doesn't exist
+	    		  if (!uploadDir.exists()) {
+	    		      boolean created = uploadDir.mkdirs();
+	    		      System.out.println("Created folder: " + created);
+	    		  }
+
+	    		  
+	              // Unique filename
+	              String originalName = file.getOriginalFilename();
+	              String extension = originalName.substring(originalName.lastIndexOf("."));
+	              String uniqueName = UUID.randomUUID() + extension;
+
+	              File destination = new File(uploadDir, uniqueName);
+	              file.transferTo(destination); // save file
+
+	              // Build URL
+	              String imageUrl = "http://localhost:2424/static/adminProfile/" + uniqueName;
+
+	              // Save to DB
+	              AdminEntity image = new AdminEntity();
+//	              image.setUsername(username);
+//	              image.setImageUrl(imageUrl);
+	              image.setUserName(username);
+	              image.setEmail(email);
+	              image.setRole("Admin");
+	              image.setPassword(passwordEncoder.encode(password));
+	              image.setProfilePic(imageUrl);
+	              
+	              repo.save(image);
+
+	              return "Uploaded successfully: " + imageUrl;
+
+	          } catch (IOException e) {
+	              e.printStackTrace();
+	              return "Error: " + e.getMessage();
+	          }
+
+	    }
+	 
 //	    @PostMapping("/submitForm")
 //	    public ResponseEntity<String> submitForm(@RequestParam String name, @RequestParam String email, @RequestParam String recaptchaResponse) {
 //	        if (reCaptchaService.verify(recaptchaResponse)) {

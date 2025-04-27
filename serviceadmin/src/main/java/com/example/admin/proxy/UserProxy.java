@@ -1,6 +1,6 @@
 package com.example.admin.proxy;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.example.admin.enums.GenderEnum;
 import com.example.admin.enums.RoleEnum;
@@ -18,14 +18,16 @@ public class UserProxy {
 
 	private Integer id;
 	private String userName;
-	private Date dob;
+	private LocalDate dob;
 	private String password;
 	private String email;
 	private GenderEnum gender;
 	private String address;
 	private String mobileNumber;
 	private String pinCode;
-//	 @Enumerated(EnumType.STRING)
+	
+//	@Enumerated(EnumType.STRING)
 	private RoleEnum Role;
 	private String userImg;
+	
 }

@@ -20,5 +20,8 @@ public class AdminProxy {
 	
 	private RoleEnum role;
 	
-    private List<String> imageUrl;
+//    private List<String> imageUrl;
+    
+    private String profilePic;
+	
 }

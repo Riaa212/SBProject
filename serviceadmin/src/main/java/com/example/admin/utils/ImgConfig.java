@@ -18,18 +18,21 @@ public class ImgConfig  implements WebMvcConfigurer
 	                .allowCredentials(true);
 }
 	  
+//	  @Override
+//	  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//	  	
+//	  	String currentDir = System.getProperty("user.dir");
+//	      String uploadPath = "file:///" + currentDir.replace("\\", "/") + "/uploads/";
+//
+//	      registry.addResourceHandler("/uploads/**")
+//	              .addResourceLocations(uploadPath);
+//
+//	      System.out.println("Serving uploads from: " + uploadPath); // 👈 Debug line
+//	  }
+//	  
 	  @Override
-	  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//	  	String uploadPath="file:///C:/Users/Riya/Desktop/SB_Quillist_Final/Quillist_04_04_2025-main/Quillist_04_04_2025-main/serviceBlog/uploads/";
-	  	
-	  	String currentDir = System.getProperty("user.dir");
-//	  http://localhost:8088/uploads/bcc98d0a-a3a3-4e5c-a1aa-51a36fb41866_place.jpg
-	  	 // Normalize slashes and build full path
-	      String uploadPath = "file:///" + currentDir.replace("\\", "/") + "/uploads/";
-
-	      registry.addResourceHandler("/uploads/**")
-	              .addResourceLocations(uploadPath);
-
-	      System.out.println("Serving uploads from: " + uploadPath); // 👈 Debug line
-	  }
+	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+	        registry.addResourceHandler("/static/**")
+	                .addResourceLocations("file:uploads/");
+	    }
 }

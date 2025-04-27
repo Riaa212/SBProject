@@ -261,7 +261,7 @@ public class AdminServiceImpl implements AdminService
 	    admin.setPassword(passwordEncoder.encode(adminEntity.getPassword()));
 	    admin.setRole(RoleEnum.Admin.toString());
 	    System.err.println(imageUrls);
-	    admin.setImageUrl(imageUrls);
+//	    admin.setImageUrl(imageUrls);
 //	    adminEntity.setImageUrl(imageUrls);
 	    
 	    AdminEntity saved = adminRepo.save(admin);

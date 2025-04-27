@@ -2,7 +2,10 @@ package com.example.admin.service.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,10 +64,13 @@ public class UserServiceImpl implements UserService
 	UserEntity user=new UserEntity();
 	user.setUserName(f.name().fullName());
 	user.setEmail(f.name().firstName()+"@gmail.com");
-	user.setDob(f.date().birthday());
+	Date fakeDob = f.date().birthday(18, 60); // age range: 18 to 60
+    LocalDate dob = fakeDob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+	user.setDob(dob);
 	user.setRole(RoleEnum.User);
 	user.setAddress(f.address().fullAddress());
 	user.setPinCode(f.country().countryCode2());
+	user.setIsActive(true);
 	user.setMobileNumber(f.phoneNumber().phoneNumber());
 //	f.avatar().image().to
 	user.setUserImg(profileImageUrl+f.number().randomNumber());
@@ -120,7 +126,7 @@ public class UserServiceImpl implements UserService
 			UserEntity userEntity = byId.get();
 			userEntity.setUserName(user.getUserName());
 			userEntity.setEmail(user.getEmail());
-			userEntity.setDob(user.getDob());
+//			userEntity.setDob(user.getDob());
 			userEntity.setGender(user.getGender());
 			userEntity.setPinCode(user.getPinCode());
 			userEntity.setAddress(user.getAddress());

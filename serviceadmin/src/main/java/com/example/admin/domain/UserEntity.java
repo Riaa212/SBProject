@@ -1,15 +1,17 @@
 package com.example.admin.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.example.admin.enums.GenderEnum;
 import com.example.admin.enums.RoleEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +26,10 @@ public class UserEntity {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String userName;
-	private Date dob;
+	
+	@JsonFormat(pattern = "yyyy-MM-dd")
+	private LocalDate dob;
+	
 //	private String password;
 	private GenderEnum gender;
 	private String address;
@@ -32,8 +37,11 @@ public class UserEntity {
 	private String mobileNumber;
 	private String pinCode;
 	private String userImg;
-//	  @Enumerated(EnumType.STRING)
+
+	@Enumerated(EnumType.STRING)
 	private RoleEnum Role;
+	
+	private Boolean isActive=false;
 //	public void setMobileNumber(PhoneNumber phoneNumber) {
 //		// TODO Auto-generated method stub
 //		
