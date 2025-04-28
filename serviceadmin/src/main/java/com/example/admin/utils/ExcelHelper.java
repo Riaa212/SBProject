@@ -2,11 +2,15 @@ package com.example.admin.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -30,8 +34,22 @@ public class ExcelHelper {
 			Sheet sheet = workbook.getSheet("userdata");
 			
 			Iterator<Row> rowItr = sheet.iterator();
+			  // 1. Create a CreationHelper
+	        CreationHelper createHelper = workbook.getCreationHelper();
 
-	
+	        // 2. Create a DataFormat
+	        DataFormat dataFormat = createHelper.createDataFormat();
+	        String dateFormat = "yyyy-MM-dd"; // Example format
+	        short format = dataFormat.getFormat(dateFormat);
+
+	        // 3. Create a CellStyle
+	        CellStyle cellStyle = workbook.createCellStyle();
+	        cellStyle.setDataFormat(format);
+
+	        // 4. Convert LocalDate to Date
+	        LocalDate localDate = LocalDate.now();
+	        java.util.Date date = java.sql.Date.valueOf(localDate); // Use java.sql.Date or java.time.Instant
+			
 			int rowCount=0;
 			while(rowItr.hasNext())
 			{
@@ -67,7 +85,7 @@ public class ExcelHelper {
 					}
 					case 3:
 					{
-						user.setEmail(next.getStringCellValue()+"@gmail.com");
+						user.setEmail(next.getStringCellValue());
 						System.err.println(user.getEmail());
 						break;
 					}
@@ -77,6 +95,13 @@ public class ExcelHelper {
 						System.err.println(user.getMobileNumber());
 						break;
 					}
+					case 5:{
+						user.setDob(localDate);
+					}
+					case 6:
+					{
+						user.setUserImg(next.getStringCellValue());
+					}
 					default:
 						break;
 					}//switch end
@@ -85,7 +110,8 @@ public class ExcelHelper {
 				}//cell iterator
 				usrlst.add(user);
 				usrlst.stream().forEach(e->System.out.println("user list:"+e));
-			}//row iterator
+			}
+			//row iterator
 			workbook.close();
 		} //try end
 		catch (Exception e) {
@@ -98,7 +124,7 @@ public class ExcelHelper {
 	//@Override
 	public static ByteArrayOutputStream empToExcel(List<UserEntity> user) throws java.io.IOException { //working
 
-		 String[] HEADERs = { "id","userName","address","email","mobileNumber","userImg" };
+		 String[] HEADERs = { "id","userName","address","email","mobileNumber","dob","userImg" };
 		 
 	    try (Workbook workbook = new XSSFWorkbook();
 	    		ByteArrayOutputStream out = new ByteArrayOutputStream();) {
@@ -135,9 +161,11 @@ public class ExcelHelper {
 	        row.createCell(1).setCellValue(u.getUserName());
 	        row.createCell(2).setCellValue(u.getAddress());
 	        row.createCell(3).setCellValue(u.getEmail());
-	        row.createCell(3).setCellValue(u.getMobileNumber());
-	        row.createCell(4).setCellValue(u.getPinCode());
-	        row.createCell(5).setCellValue(u.getUserImg());
+	        row.createCell(4).setCellValue(u.getMobileNumber());
+	        row.createCell(5).setCellValue(u.getDob());
+//	        row.createCell(2).setCellValue(emps.getDob());?
+//	        row.createCell(5).setCellValue(u.getPinCode());
+	        row.createCell(6).setCellValue(u.getUserImg());
 //	        row.createCell(2).setCellValue(emps.getDob());
 //	        row.createCell(3).setCellValue(emps.getName());	 
 	        

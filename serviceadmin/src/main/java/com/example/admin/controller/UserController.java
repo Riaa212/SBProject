@@ -3,7 +3,9 @@ package com.example.admin.controller;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,13 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.admin.domain.UserEntity;
 import com.example.admin.proxy.UserProxy;
+import com.example.admin.repository.UserRepo;
 import com.example.admin.service.impl.UserServiceImpl;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping("/user")
@@ -31,6 +29,9 @@ public class UserController {
 
 	@Autowired
 	private UserServiceImpl service;
+	
+	@Autowired
+	private UserRepo repo;
 	
 	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@RequestBody UserProxy user)
@@ -96,5 +97,12 @@ public class UserController {
 	        .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
 //	        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
 	        .body(service.downloadExcelFile().toByteArray());
+	  }
+	  
+	  @GetMapping("/getUserByEailAndUserName/{username}/{email}")
+	  public ResponseEntity<?> getByUsernameandemail(@PathVariable("username") String username,
+			  @PathVariable("email") String email)
+	  {
+		  return ResponseEntity.status(HttpStatus.OK).body(repo.findByUserNameOrEmail(username, email));
 	  }
 }

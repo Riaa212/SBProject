@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -191,6 +192,84 @@ public class AdminController {
 
 	    }
 	 
+	    
+	    @PostMapping("/updateProfile")
+		public AdminEntity updateAdminById(
+				@RequestParam("email") String email,
+				@RequestParam("username") String username,
+				@RequestParam("image") MultipartFile file) throws IOException
+//		@RequestParam("image") MultipartFile file
+		{
+	    	Integer	aid=1;
+	    	Optional<AdminEntity> byId = repo.findById(aid);
+			if(byId.isPresent())
+			{
+				AdminEntity adminEntity = byId.get();
+				
+				String projectRoot = new File(".").getCanonicalPath();
+	    		  String folderPath = projectRoot + File.separator + "uploads" + File.separator + "adminProfile";
+	    		  File uploadDir = new File(folderPath);
+	    		  // Unique filename
+	              String originalName = file.getOriginalFilename();
+	              String extension = originalName.substring(originalName.lastIndexOf("."));
+	              String uniqueName = UUID.randomUUID() + extension;
+
+	              File destination = new File(uploadDir, uniqueName);
+	              file.transferTo(destination); // save file
+
+	              // Build URL
+	              String imageUrl = "http://localhost:2424/static/adminProfile/" + uniqueName;
+				  System.err.println("upload======="+imageUrl);
+				 adminEntity.setUserName(username);
+				 adminEntity.setEmail(email);
+				  adminEntity.setProfilePic(imageUrl);
+				  repo.save(adminEntity);
+//				System.err.println(adminEntity.getProfilePic());
+//				System.err.println(file);
+				return adminEntity;
+			}
+//			  try {
+	    		  
+	    		// Get absolute path to the project root
+//	    		  String projectRoot = new File(".").getCanonicalPath();
+//	    		  String folderPath = projectRoot + File.separator + "uploads" + File.separator + "adminProfile";
+//	    		  File uploadDir = new File(folderPath);
+
+	    		  // Create folder if it doesn't exist
+//	    		  if (!uploadDir.exists()) {
+//	    		      boolean created = uploadDir.mkdirs();
+//	    		      System.out.println("Created folder: " + created);
+//	    		  }
+
+	    		  
+	              // Unique filename
+//	              String originalName = file.getOriginalFilename();
+//	              String extension = originalName.substring(originalName.lastIndexOf("."));
+//	              String uniqueName = UUID.randomUUID() + extension;
+
+//	              File destination = new File(uploadDir, uniqueName);
+//	              file.transferTo(destination); // save file
+
+	              // Build URL
+//	              String imageUrl = "http://localhost:2424/static/adminProfile/" + uniqueName;
+
+	              // Save to DB
+//	              AdminEntity image = new AdminEntity();
+//	              image.setProfilePic(imageUrl);
+	              
+//	              repo.save(image);
+
+//	              return "Uploaded successfully: " + imageUrl;
+//
+//	          } catch (IOException e) {
+//	              e.printStackTrace();
+//	              return "Error: " + e.getMessage();
+//	          }
+			  return null;
+		}
+	    
+	    
+	    
 //	    @PostMapping("/submitForm")
 //	    public ResponseEntity<String> submitForm(@RequestParam String name, @RequestParam String email, @RequestParam String recaptchaResponse) {
 //	        if (reCaptchaService.verify(recaptchaResponse)) {
