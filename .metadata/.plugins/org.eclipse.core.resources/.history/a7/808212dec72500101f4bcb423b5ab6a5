@@ -58,8 +58,7 @@ public class UserServiceImpl implements UserService
 	private UserEntity generateUsers()
 	{
 		
-//	String profileImageUrl = "https://picsum.photos/200/300?random=";
-		String profileImageUrl="https://avatar.iran.liara.run/public";
+	String profileImageUrl = "https://picsum.photos/200/300?random=" ;
 	LocalDateTime curreDateTime=LocalDateTime.now();
 	Faker f=new Faker();
 	UserEntity user=new UserEntity();
@@ -74,8 +73,7 @@ public class UserServiceImpl implements UserService
 	user.setIsActive(true);
 	user.setMobileNumber(f.phoneNumber().phoneNumber());
 //	f.avatar().image().to
-	user.setUserImg(profileImageUrl);
-//	user.setUserImg(profileImageUrl+f.number().randomNumber());
+	user.setUserImg(profileImageUrl+f.number().randomNumber());
 	return user;
 	}
 	
