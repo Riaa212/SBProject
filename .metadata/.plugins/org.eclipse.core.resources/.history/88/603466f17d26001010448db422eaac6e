@@ -1,0 +1,23 @@
+package com.example.admin.domain;
+
+import java.time.Instant;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class RefreshToken {
+
+	private Integer id;
+	
+	private String token;
+	
+	private Instant expiryDate;
+	
+	private AdminEntity admin;
+	
+
+}

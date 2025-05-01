@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService
 	{
 		
 //	String profileImageUrl = "https://picsum.photos/200/300?random=";
-		String profileImageUrl="https://avatar.iran.liara.run/public";
+		String profileImageUrl="https://avatar.iran.liara.run/public?random=";
 	LocalDateTime curreDateTime=LocalDateTime.now();
 	Faker f=new Faker();
 	UserEntity user=new UserEntity();

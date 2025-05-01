@@ -1,9 +1,0 @@
-package com.example.admin.proxy;
-
-public class AdminProxy {
-
-	private Integer id;
-	private String userName;
-//	private String role;
-	
-}
