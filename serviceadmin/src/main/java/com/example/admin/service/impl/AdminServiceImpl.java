@@ -134,14 +134,14 @@ public class AdminServiceImpl implements AdminService
 			SimpleMailMessage mailMessage= new SimpleMailMessage();
 			otp= new DecimalFormat("000000").format(new Random().nextInt(999999));
 			System.out.println("OTP===>"+otp);
-			 adminobj.setOtp(otp);
-			adminRepo.save(adminobj);
+			
 			   mailMessage.setFrom(sender);
 	           mailMessage.setTo(details.getRecipient());
 	           mailMessage.setText("Your otp is.."+otp);
 	           mailMessage.setSubject(details.getSubject());
-//	           javaMailSender.send(mailMessage);
-	        
+	           javaMailSender.send(mailMessage);
+	           adminobj.setOtp(otp);
+				adminRepo.save(adminobj);
 			System.out.println("OTP===>"+otp);	
 //			adminRepo.save(adminobj);
 		}
