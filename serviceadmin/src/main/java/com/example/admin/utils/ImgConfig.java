@@ -32,7 +32,7 @@ public class ImgConfig  implements WebMvcConfigurer
 //	  
 	  @Override
 	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	        registry.addResourceHandler("/static/**")
-	                .addResourceLocations("file:uploads/");
+	        registry.addResourceHandler("/static/adminProfile/**")
+	                .addResourceLocations("file:uploads/adminProfile/");
 	    }
 }

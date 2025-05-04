@@ -59,7 +59,9 @@ public class UserServiceImpl implements UserService
 	{
 		
 //	String profileImageUrl = "https://picsum.photos/200/300?random=";
-		String profileImageUrl="https://avatar.iran.liara.run/public?random=";
+//		String profileImageUrl="https://avatar.iran.liara.run/public?random=";
+	String profileImageUrl="https://picsum.photos/200/300?random=";	
+	
 	LocalDateTime curreDateTime=LocalDateTime.now();
 	Faker f=new Faker();
 	UserEntity user=new UserEntity();
@@ -69,13 +71,14 @@ public class UserServiceImpl implements UserService
     LocalDate dob = fakeDob.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 	user.setDob(dob);
 	user.setRole(RoleEnum.User);
+//	user.setIsActive(false);
 	user.setAddress(f.address().fullAddress());
 	user.setPinCode(f.country().countryCode2());
 	user.setIsActive(true);
 	user.setMobileNumber(f.phoneNumber().phoneNumber());
 //	f.avatar().image().to
-	user.setUserImg(profileImageUrl);
-//	user.setUserImg(profileImageUrl+f.number().randomNumber());
+//	user.setUserImg(profileImageUrl);
+	user.setUserImg(profileImageUrl+f.number().randomNumber());
 	return user;
 	}
 	

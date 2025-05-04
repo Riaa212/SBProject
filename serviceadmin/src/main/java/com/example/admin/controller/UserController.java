@@ -1,8 +1,10 @@
 package com.example.admin.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.admin.proxy.UserProxy;
 import com.example.admin.repository.UserRepo;
+import com.example.admin.service.impl.PdfService;
 import com.example.admin.service.impl.UserServiceImpl;
 
 @RestController
@@ -32,6 +35,9 @@ public class UserController {
 	
 	@Autowired
 	private UserRepo repo;
+	
+	@Autowired
+	private PdfService pdfService;
 	
 	@PostMapping("/register")
 	public ResponseEntity<?> registerUser(@RequestBody UserProxy user)
@@ -98,6 +104,19 @@ public class UserController {
 //	        .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
 	        .body(service.downloadExcelFile().toByteArray());
 	  }
+	  
+	    @GetMapping("/downloadpdf")
+	    public ResponseEntity<InputStreamResource> downloadPdf() {
+	    	 ByteArrayInputStream bis = pdfService.createPdfWithTable();
+
+	         HttpHeaders headers = new HttpHeaders();
+	         headers.add("Content-Disposition", "inline; filename=users.pdf");
+
+	         return ResponseEntity.ok()
+	                 .headers(headers)
+	                 .contentType(MediaType.APPLICATION_PDF)
+	                 .body(new InputStreamResource(bis));
+	     }
 	  
 	  @GetMapping("/getUserByEailAndUserName/{username}/{email}")
 	  public ResponseEntity<?> getByUsernameandemail(@PathVariable("username") String username,

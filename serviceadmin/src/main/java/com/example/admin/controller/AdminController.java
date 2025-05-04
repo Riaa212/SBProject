@@ -1,5 +1,6 @@
 package com.example.admin.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -8,7 +9,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,6 +35,7 @@ import com.example.admin.domain.LoginResponse;
 import com.example.admin.proxy.AdminProxy;
 import com.example.admin.repository.AdminRepo;
 import com.example.admin.service.impl.AdminServiceImpl;
+import com.example.admin.service.impl.PdfService;
 import com.example.admin.service.impl.RecaptchaService;
 
 import jakarta.servlet.http.HttpSession;
@@ -51,6 +56,7 @@ public class AdminController {
 	 
 	 @Autowired
 	 private BCryptPasswordEncoder passwordEncoder;
+	 
 	 
 	@PostMapping("/register")
 	public ResponseEntity<?> registerAdmin(@RequestBody AdminProxy admin)
@@ -117,6 +123,7 @@ public class AdminController {
 	    return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.login(loginRequest));
 	}
 	
+	
 	 @PostMapping("/registerAdminwithImg")
 	 public ResponseEntity<?> RegisterAdmin(
 //	     @RequestPart("title") String title,
@@ -131,6 +138,7 @@ public class AdminController {
 	 
 //	 private static final String UPLOAD_DIR = "adminProfile/";
 
+	 //register admin
 	    @PostMapping("/upload")
 	    public String uploadImage(
 	    		@RequestParam("username") String username,
@@ -193,16 +201,14 @@ public class AdminController {
 
 	    }
 	 
-	    
-	    @PostMapping(path="/updateProfile")
+	    //update admin
+	    @PostMapping(value="/updateProfile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 		public AdminEntity updateAdminById(
-				@RequestParam (value="email",required = false) String email,
-				@RequestParam(value="username",required = false) String username,
-				@RequestParam("image") MultipartFile file) throws IOException
-//		@RequestParam("image") MultipartFile file
+				@RequestParam("image") MultipartFile file) 
+		
 		{
-	    	System.err.println(email+"\n"+username+"\n"+file);
-	    	Integer	aid=6;
+	    	System.err.println(file.getContentType());
+	    	Integer	aid=1;
 	    	Optional<AdminEntity> byId = repo.findById(aid);
 	    	
 	    	
@@ -212,6 +218,7 @@ public class AdminController {
 			{
 				AdminEntity adminEntity = byId.get();
 				
+				try {
 				String projectRoot = new File(".").getCanonicalPath();
 	    		  String folderPath = projectRoot + File.separator + "uploads" + File.separator + "adminProfile";
 	    		  File uploadDir = new File(folderPath);
@@ -226,55 +233,43 @@ public class AdminController {
 	              // Build URL
 	              String imageUrl = "http://localhost:2424/static/adminProfile/" + uniqueName;
 				  System.err.println("upload======="+imageUrl);
-				  
-				  adminEntity.setUserName(username);
-				  adminEntity.setEmail(email);
+				 
 				  adminEntity.setProfilePic(imageUrl);
 				  
 				  repo.save(adminEntity);
-//				System.err.println(adminEntity.getProfilePic());
-//				System.err.println(file);
 				return adminEntity;
+				}
+				catch (IOException e) {
+		              e.printStackTrace();
+		          }
 			}
-//			  try {
-	    		  
-	    		// Get absolute path to the project root
-//	    		  String projectRoot = new File(".").getCanonicalPath();
-//	    		  String folderPath = projectRoot + File.separator + "uploads" + File.separator + "adminProfile";
-//	    		  File uploadDir = new File(folderPath);
-
-	    		  // Create folder if it doesn't exist
-//	    		  if (!uploadDir.exists()) {
-//	    		      boolean created = uploadDir.mkdirs();
-//	    		      System.out.println("Created folder: " + created);
-//	    		  }
-
-	    		  
-	              // Unique filename
-//	              String originalName = file.getOriginalFilename();
-//	              String extension = originalName.substring(originalName.lastIndexOf("."));
-//	              String uniqueName = UUID.randomUUID() + extension;
-
-//	              File destination = new File(uploadDir, uniqueName);
-//	              file.transferTo(destination); // save file
-
-	              // Build URL
-//	              String imageUrl = "http://localhost:2424/static/adminProfile/" + uniqueName;
-
-	              // Save to DB
-//	              AdminEntity image = new AdminEntity();
-//	              image.setProfilePic(imageUrl);
-	              
-//	              repo.save(image);
-
-//	              return "Uploaded successfully: " + imageUrl;
-//
-//	          } catch (IOException e) {
-//	              e.printStackTrace();
-//	              return "Error: " + e.getMessage();
-//	          }
 			  return null;
 		}
+	    
+	    
+	    
+	    @PostMapping(path="/updateProfileData")
+		public AdminEntity updateAdminProfileData(@RequestBody AdminEntity admin) 
+		{
+//	    	System.err.println("email--"+email+"password---"+username);
+	    	Integer	aid=1;
+	    	Optional<AdminEntity> byId = repo.findById(aid);
+	    	
+	    	
+	    	System.err.println(byId);
+			if(byId.isPresent())
+			{
+				AdminEntity adminEntity = byId.get();
+				  adminEntity.setUserName(admin.getUserName());
+				  adminEntity.setEmail(admin.getEmail());
+				  System.err.println(adminEntity);
+				  repo.save(adminEntity);
+				return adminEntity;
+			}
+			  return byId.get();
+		}
+	    
+	    //download pdf
 	    
 	    
 	    
