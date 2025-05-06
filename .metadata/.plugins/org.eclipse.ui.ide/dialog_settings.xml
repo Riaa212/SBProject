@@ -15,7 +15,7 @@
 		<item value="org.eclipse.jgit.ssh.apache:7.1.0.202411261347-r"/>
 		<item value="org.eclipse.jgit:7.1.0.202411261347-r"/>
 		<item value="org.eclipse.jst.common.fproj.enablement.jdt:3.30.0.v202405122323"/>
-		<item value="org.eclipse.justj.openjdk.hotspot.jre.full:21.0.6.v20250130-0529"/>
+		<item value="org.eclipse.justj.openjdk.hotspot.jre.full:21.0.5.v20241023-1957"/>
 		<item value="org.eclipse.m2e.feature:2.7.0.20241126-1642"/>
 		<item value="org.eclipse.m2e.logback.feature:2.7.0.20241001-1350"/>
 		<item value="org.eclipse.m2e.wtp.feature:1.6.1.20231024-1618"/>
@@ -38,16 +38,17 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="D:\SB_Project\SBProject\serviceadmin"/>
 			<item value="C:\Users\RiyaRami\OneDrive - Online PSB Loans\Desktop\05-05-2025\SBProject\serviceregistery"/>
 			<item value="C:\Users\RiyaRami\OneDrive - Online PSB Loans\Desktop\05-05-2025\SBProject\serviceapigateway"/>
 			<item value="C:\Users\RiyaRami\OneDrive - Online PSB Loans\Desktop\05-05-2025\SBProject\serviceadmin"/>
 		</list>
 		<section name="SmartImportWizard.dialogBounds">
 			<item key="DIALOG_X_ORIGIN" value="249"/>
-			<item key="DIALOG_Y_ORIGIN" value="8"/>
-			<item key="DIALOG_WIDTH" value="885"/>
-			<item key="DIALOG_HEIGHT" value="629"/>
-			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+			<item key="DIALOG_Y_ORIGIN" value="9"/>
+			<item key="DIALOG_WIDTH" value="1102"/>
+			<item key="DIALOG_HEIGHT" value="726"/>
+			<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
 		</section>
 	</section>
 </section>

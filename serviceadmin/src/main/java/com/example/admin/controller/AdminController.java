@@ -210,41 +210,41 @@ public class AdminController {
 		{
 	    	String filetype=file.getContentType();
 //	    	System.err.println(file.getContentType());
-//	    	Integer	aid=1;
-//	    	Optional<AdminEntity> byId = repo.findById(aid);
-//	    	
-//	    	
-//	    	
-//	    	System.err.println(byId);
-//			if(byId.isPresent())
-//			{
-//				AdminEntity adminEntity = byId.get();
-//				
-//				try {
-//				String projectRoot = new File(".").getCanonicalPath();
-//	    		  String folderPath = projectRoot + File.separator + "uploads" + File.separator + "adminProfile";
-//	    		  File uploadDir = new File(folderPath);
-//	    		  // Unique filename
-//	              String originalName = file.getOriginalFilename();
-//	              String extension = originalName.substring(originalName.lastIndexOf("."));
-//	              String uniqueName = UUID.randomUUID() + extension;
-//
-//	              File destination = new File(uploadDir, uniqueName);
-//	              file.transferTo(destination); // save file
-//
-//	              // Build URL
-//	              String imageUrl = "http://localhost:2424/static/adminProfile/" + uniqueName;
-//				  System.err.println("upload======="+imageUrl);
-//				 
-//				  adminEntity.setProfilePic(imageUrl);
-//				  
-//				  repo.save(adminEntity);
-//				return imageUrl;
-//				}
-//				catch (IOException e) {
-//		              e.printStackTrace();
-//		          }
-//			}
+	    	Integer	aid=1;
+	    	Optional<AdminEntity> byId = repo.findById(aid);
+	    	
+	    	
+	    	
+	    	System.err.println(byId);
+			if(byId.isPresent())
+			{
+				AdminEntity adminEntity = byId.get();
+				
+				try {
+				String projectRoot = new File(".").getCanonicalPath();
+	    		  String folderPath = projectRoot + File.separator + "uploads" + File.separator + "adminProfile";
+	    		  File uploadDir = new File(folderPath);
+	    		  // Unique filename
+	              String originalName = file.getOriginalFilename();
+	              String extension = originalName.substring(originalName.lastIndexOf("."));
+	              String uniqueName = UUID.randomUUID() + extension;
+
+	              File destination = new File(uploadDir, uniqueName);
+	              file.transferTo(destination); // save file
+
+	              // Build URL
+	              String imageUrl = "http://localhost:2424/static/adminProfile/" + uniqueName;
+				  System.err.println("upload======="+imageUrl);
+				 
+				  adminEntity.setProfilePic(imageUrl);
+				  
+				  repo.save(adminEntity);
+				return imageUrl;
+				}
+				catch (IOException e) {
+		              e.printStackTrace();
+		          }
+			}
 			  return filetype;
 		}
 	    
