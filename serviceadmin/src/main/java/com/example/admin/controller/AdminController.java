@@ -1,6 +1,5 @@
 package com.example.admin.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -9,8 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +32,6 @@ import com.example.admin.domain.LoginResponse;
 import com.example.admin.proxy.AdminProxy;
 import com.example.admin.repository.AdminRepo;
 import com.example.admin.service.impl.AdminServiceImpl;
-import com.example.admin.service.impl.PdfService;
 import com.example.admin.service.impl.RecaptchaService;
 
 import jakarta.servlet.http.HttpSession;
@@ -108,6 +104,7 @@ public class AdminController {
 	
 	 @GetMapping("/getCaptcha")
 	    public ResponseEntity<Map<String, String>> getCaptcha(HttpSession session) throws IOException {
+		 System.err.println("get captcha called..");
 	        return ResponseEntity.ok(reCaptchaService.createCaptcha(session));
 	    }
 	

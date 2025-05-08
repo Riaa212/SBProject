@@ -8,6 +8,7 @@ class ServiceadminApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.err.println("testing method...");
 	}
 
 }
