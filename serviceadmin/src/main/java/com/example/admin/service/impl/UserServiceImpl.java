@@ -116,8 +116,7 @@ public class UserServiceImpl implements UserService
 		Optional<UserEntity> byId = userRepo.findById(userId);
 		if(byId.isPresent())
 		{
-		UserEntity userEntity = byId.get();	
-		
+		UserEntity userEntity = byId.get();
 		return helper.convert(userEntity, UserProxy.class);
 		}
 		return null;
@@ -135,6 +134,7 @@ public class UserServiceImpl implements UserService
 			userEntity.setGender(user.getGender());
 			userEntity.setPinCode(user.getPinCode());
 			userEntity.setAddress(user.getAddress());
+            userEntity.setIsActive(user.getIsActive());
 			userRepo.save(userEntity);
 			System.err.println(userEntity);
 		}

@@ -6,12 +6,7 @@ import com.example.admin.enums.GenderEnum;
 import com.example.admin.enums.RoleEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,7 +35,8 @@ public class UserEntity {
 
 	@Enumerated(EnumType.STRING)
 	private RoleEnum Role;
-	
+
+    @Column(name = "is_active")
 	private Boolean isActive=false;
 //	public void setMobileNumber(PhoneNumber phoneNumber) {
 //		// TODO Auto-generated method stub

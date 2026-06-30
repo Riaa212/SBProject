@@ -29,5 +29,8 @@ public class UserProxy {
 //	@Enumerated(EnumType.STRING)
 	private RoleEnum Role;
 	private String userImg;
+
+    private Boolean isActive;
+
 	
 }
